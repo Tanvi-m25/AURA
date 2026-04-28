@@ -2,6 +2,7 @@
 import { useState } from "react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
+import { API_BASE } from "@/lib/api";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -15,7 +16,7 @@ export default function LoginPage() {
     setLoading(true);
     setError("");
     try {
-      const res = await axios.post("http://localhost:5000/api/auth/login", { email, password });
+      const res = await axios.post(`${API_BASE}/api/auth/login`, { email, password });
       if (res.data.success) {
         localStorage.setItem("aura_user", JSON.stringify(res.data.user));
         router.push("/dashboard");

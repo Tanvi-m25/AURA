@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import Sidebar from "@/components/Navbar";
 import { useRouter } from "next/navigation";
+import { API_BASE } from "@/lib/api";
 
 export default function ApprovalPage() {
   const router = useRouter();
@@ -19,7 +20,7 @@ export default function ApprovalPage() {
   }, []);
 
   const fetchLoans = () => {
-    axios.get("http://localhost:5000/api/loans/").then((res) => {
+    axios.get(`${API_BASE}/api/loans/`).then((res) => {
       const pending = res.data.data.filter((l: any) =>
         ["SUBMITTED", "UNDER_REVIEW", "RISK_ASSESSMENT"].includes(l.status)
       );
@@ -31,7 +32,7 @@ export default function ApprovalPage() {
   const updateStatus = async (id: number, status: string) => {
     setUpdating(id);
     try {
-      await axios.put(`http://localhost:5000/api/loans/${id}/status`, {
+      await axios.put(`${API_BASE}/api/loans/${id}/status`, {
         status,
         performed_by: user?.email,
       });

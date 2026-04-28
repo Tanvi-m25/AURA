@@ -4,6 +4,7 @@ import axios from "axios";
 import Sidebar from "@/components/Navbar";
 import { useRouter } from "next/navigation";
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, BarChart, Bar, XAxis, YAxis } from "recharts";
+import { API_BASE } from "@/lib/api";
 
 export default function DashboardPage() {
   const router = useRouter();
@@ -15,7 +16,7 @@ export default function DashboardPage() {
     const stored = localStorage.getItem("aura_user");
     if (!stored) { router.push("/"); return; }
     setUser(JSON.parse(stored));
-    axios.get("http://localhost:5000/api/loans/").then((res) => {
+    axios.get(`${API_BASE}/api/loans/`).then((res) => {
       setLoans(res.data.data);
       setLoading(false);
     });

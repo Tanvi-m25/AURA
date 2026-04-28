@@ -3,6 +3,7 @@ import { useEffect, useState, Suspense } from "react";
 import axios from "axios";
 import Sidebar from "@/components/Navbar";
 import { useRouter, useSearchParams } from "next/navigation";
+import { API_BASE } from "@/lib/api";
 
 function RiskContent() {
   const router = useRouter();
@@ -28,7 +29,7 @@ function RiskContent() {
   useEffect(() => {
     if (!ready) return;
     if (!id) { router.push("/loans"); return; }
-    axios.get(`http://localhost:5000/api/loans/${id}`)
+    axios.get(`${API_BASE}/api/loans/${id}`)
       .then((res) => {
         setLoan(res.data.data);
         if (res.data.data.risk_score) {
@@ -54,7 +55,7 @@ function RiskContent() {
     setMessage("");
     setExplanation("");
     try {
-      const res = await axios.post(`http://localhost:5000/api/risk/analyze/${id}`);
+      const res = await axios.post(`${API_BASE}/api/risk/analyze/${id}`);
       setResult(res.data);
       setLoan((prev: any) => ({ ...prev, status: "RISK_ASSESSMENT" }));
     } catch (e) {
@@ -66,7 +67,7 @@ function RiskContent() {
   const handleExplain = async () => {
     setExplaining(true);
     try {
-      const res = await axios.get(`http://localhost:5000/api/risk/explain/${id}`);
+      const res = await axios.get(`${API_BASE}/api/risk/explain/${id}`);
       console.log("explain response:", res.data);
       if (res.data && res.data.explanation) {
         setExplanation(res.data.explanation);
@@ -89,7 +90,7 @@ function RiskContent() {
   const handleDecision = async (decision: string) => {
     setUpdatingStatus(true);
     try {
-      await axios.put(`http://localhost:5000/api/loans/${id}/status`, {
+      await axios.put(`${API_BASE}/api/loans/${id}/status`, {
         status: decision,
         performed_by: user?.email,
       });
