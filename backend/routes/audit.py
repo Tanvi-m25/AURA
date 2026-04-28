@@ -9,8 +9,8 @@ def get_audit_log():
     cursor = db.cursor(dictionary=True)
     cursor.execute("""
         SELECT al.*, la.application_number
-        FROM Audit_Log al
-        LEFT JOIN Loan_Application la ON al.application_id = la.application_id
+        FROM audit_log al
+        LEFT JOIN loan_application la ON al.application_id = la.application_id
         ORDER BY al.created_at DESC
         LIMIT 100
     """)
